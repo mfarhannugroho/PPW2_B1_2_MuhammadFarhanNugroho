@@ -12,6 +12,8 @@ use Illuminate\Http\RedirectResponse;
 
 //import Facade "Storage"
 use Illuminate\Support\Facades\Storage;
+use App\Models\Post;
+
 
 class PostController extends Controller
 {    
@@ -21,13 +23,13 @@ class PostController extends Controller
      * @return View
      */
     public function index(): View
-    {
-        //get posts
-        Post::latest()->paginate(5);
+{
+    // Get posts
+    $posts = Post::latest()->paginate(5);
 
-        //render view with posts
-        return view('index', compact('posts'));
-    }
+    // Render view with posts
+    return view('posts.index', compact('posts'));
+}
 
     /**
      * create
@@ -36,7 +38,7 @@ class PostController extends Controller
      */
     public function create(): View
     {
-        return view('create');
+        return view('posts.create');
     }
  
     /**
@@ -78,7 +80,7 @@ class PostController extends Controller
     public function show(string $id): View
     {
         //get post by ID
-        $post = Post::findOrFail($id);
+        $post = PostController::findOrFail($id);
 
         //render view with post
         return view('posts.show', compact('post'));
@@ -93,7 +95,7 @@ class PostController extends Controller
     public function edit(string $id): View
     {
         //get post by ID
-        $post = Post::findOrFail($id);
+        $post = PostController::findOrFail($id);
 
         //render view with post
         return view('posts.edit', compact('post'));
@@ -116,7 +118,7 @@ class PostController extends Controller
         ]);
 
         //get post by ID
-        $post = Post::findOrFail($id);
+        $post = PostController::findOrFail($id);
 
         //check if image is uploaded
         if ($request->hasFile('image')) {
@@ -157,7 +159,7 @@ class PostController extends Controller
     public function destroy($post): RedirectResponse
     {
         //get post by ID
-        $post = Post::findOrFail();
+        $post = PostController::findOrFail();
 
         //delete image
         Storage::delete('public/posts/'. $post->image);
